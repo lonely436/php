@@ -90,7 +90,23 @@ Route::get('viewtest1', function () {
 });
 
 // for语句
-Route::get('viewtest3', function () {
-    $tech_enterprises = ['华为', '美的', '腾讯', '比亚迪', '格力'];
-    return view('viewtest3', ['tech_enterprises' => $tech_enterprises]);
+Route::get('viewtest2', function () {
+    // $tech_enterprises = ['华为', '美的', '腾讯', '比亚迪', '格力'];
+    // $tech_enterprises = [['id' => 1, 'name' => '华为'], ['id' => 2, 'name' => '美的'], ['id' => 3, 'name' => '腾讯'], ['id' => 4, 'name' => '比亚迪'], ['id' => 5, 'name' => '格力']];
+    // return view('viewtest3', ['tech_enterprises' => $tech_enterprises]);
+
+    $en1 = new stdClass();
+    $en1->id = 1;
+    $en1->name = '华帝';
+
+    $en2 = new stdClass();
+    $en2->id = 2;
+    $en2->name = '明阳';
+
+    $en3 = new stdClass();
+    $en3->id = 3;
+    $en3->name = '木林森';
+
+    $tech_enterprises = [$en1, $en2, $en3];
+    return view('viewtest2', ['tech_enterprises' => $tech_enterprises]);
 });
