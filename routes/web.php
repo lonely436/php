@@ -64,6 +64,7 @@ Route::group(array('prefix' => 'test'), function () {
     // post方式访问的insert方法
     Route::post('insert', [TestController::class, 'insert']);
 });
+*/
 
 // 广东名企
 Route::group(array('prefix' => 'enterprise'), function () {
@@ -82,8 +83,8 @@ Route::group(array('prefix' => 'enterprise'), function () {
 });
 
 // 资源路由
-Route::resource('articles', ArticleController::class);
-*/
+// Route::resource('articles', ArticleController::class);
+
 
 Route::get('viewtest1', function () {
     return view('viewtest1', ['city' => '<b>病毒代码</b>', 'enterprise' => '华帝', 'time' => 23]);
@@ -111,6 +112,19 @@ Route::get('viewtest2', function () {
     return view('viewtest2', ['tech_enterprises' => $tech_enterprises]);
 });
 
-Route::get('/indexblade', function () {
-    return view('indexblade');
+Route::get('/detail', function () {
+    return view('enterprise.detail');
 });
+
+Route::get('/file', function () {
+    return view('file');
+});
+
+Route::post('upload', [TestController::class, 'upload']);
+
+Route::get('/mulfile', function () {
+    return view('mulfile');
+});
+
+// 多文件上传
+Route::post('/mulupload', [TestController::class, 'mulupload']);
