@@ -110,3 +110,7 @@ Route::get('viewtest2', function () {
     $tech_enterprises = [$en1, $en2, $en3];
     return view('viewtest2', ['tech_enterprises' => $tech_enterprises]);
 });
+
+Route::get('/indexblade', function () {
+    return view('indexblade');
+});
