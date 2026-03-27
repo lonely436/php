@@ -17,7 +17,7 @@
 
     <p>
         <hr>
-        zspt-laravel 2023-2030
+        @section('footer') zspt-laravel 2023-2030 @show
     </p>
 </body>
 

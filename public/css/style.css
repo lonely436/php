@@ -1,0 +1,161 @@
+body {
+  margin: 0;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 16px;
+}
+
+body a {
+  transition: 0.5s all ease;
+  -webkit-transition: 0.5s all ease;
+  -moz-transition: 0.5s all ease;
+  -o-transition: 0.5s all ease;
+  -ms-transition: 0.5s all ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+ul,
+label {
+  margin: 0;
+  padding: 0;
+}
+
+body a:hover {
+  text-decoration: none;
+}
+
+button.btn.btn-default {
+  background-color: #5e5e5e;
+  color: #fff;
+}
+
+.navbar-default {
+  background-color: #ddd;
+}
+
+ul.nav.navbar-nav li a:hover,
+ul.nav.navbar-nav li a.active {
+
+  background-color: rgb(6, 143, 208);
+  color: #fff;
+}
+
+img {
+  max-width: 100%;
+}
+
+.mybutton {
+  text-align: right;
+}
+
+.logo {
+
+  width: 150px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.main {
+  padding: 0.5em 0;
+}
+
+.grids .thumbnail {
+  padding: 1.5em;
+  background-color: #F4F2F2;
+  border: none;
+}
+
+.main-thumb .caption {
+  padding: 0 !important;
+}
+
+.main-thumb h4 {
+  font-size: 1.6em;
+  margin-bottom: 0.3em;
+  font-weight: 400;
+  color:#333;
+}
+
+.main-thumb h5 {
+  font-size: 1.3em;
+  color: rgb(6, 143, 208);
+  margin: 1em 0 0.3em;
+}
+
+.main-thumb p {
+  font-size: 14px;
+  margin: 0.5em 0 1em;
+  color: #000;
+  font-weight: 300;
+}
+
+/* 详情页-- */
+.content {
+  margin-top: 40px;
+}
+
+.content .caption {
+  padding: 0 !important;
+}
+
+.content img {
+  width: 100%;
+  border: 10px solid rgb(242, 237, 237);
+  box-shadow: 1px 1px 1px rgb(192, 188, 188);
+  -webkit-box-shadow: 1px 1px 1px rgb(192, 188, 188);
+  -moz-box-shadow: 1px 1px 1px rgb(192, 188, 188);
+  -o-box-shadow: 1px 1px 1px rgb(192, 188, 188);
+  -ms-box-shadow: 1px 1px 1px rgb(192, 188, 188);
+}
+
+.content h5 {
+  font-size: 1.3em;
+  font-style: italic;
+  color: #645d5d;
+  /* color: rgb(6, 143, 208); */
+  margin: 1em 0.7em 0.3em;
+  font-weight: 500;
+}
+
+.content h6 {
+  /* color: rgba(242, 114, 66, 0.96); */
+  color: rgb(6, 143, 208);
+  font-size: 1.1em;
+  margin: 1em 0 0.3em;
+  font-weight: 500;
+}
+
+.content p {
+  font-size: 15px;
+  margin: 0.5em 0 1em;
+  color: #000;
+  font-weight: 300;
+  line-height: 2em;
+}
+
+/* 详情页--end */
+
+
+.main h3 {
+  font-size: 1.6em;
+  font-weight: 500;
+  font-style: italic;
+  color: #645d5d;
+  margin-bottom: 1em;
+  font-family: 'Playfair Display', serif;
+}
+
+.myfooter {
+  margin: 0.7em 0 0 0;
+}
