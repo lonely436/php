@@ -24,13 +24,19 @@ class EnterpriseController extends Controller
 
     public function insert(Request $request)
     {
-        if (strlen($request->input('name')) >= 2) {
+        if (strlen($request->input('name')) >= 2 && $request->hasFile('image')) {
+            // 上传图片
+            $file = $request->file('image');
+            $path = $file->store('images');
+            $pashDB = "/uploads" . $path; // 写入数据库的路径
+
+            // 插入
             DB::table('enterprise')->insert(
                 [
                     'name' => $request->input('name'),
                     'abbreviate' => $request->input('abbreviate'),
                     'philosophy' => $request->input('philosophy'),
-                    'image' => '/images/placeholder.jpg',
+                    'image' => $pashDB,
                     'description' => $request->input('description'),
                 ]
             );

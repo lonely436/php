@@ -9,7 +9,7 @@
             <center>
                 <h3>添加企业信息</h3>
             </center>
-            <form action="{{url('/enterprise/insert')}}" method="post">
+            <form action="{{url('/enterprise/insert')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label>名 称</label>
