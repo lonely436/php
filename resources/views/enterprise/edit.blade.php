@@ -10,7 +10,7 @@
                 <h3>编辑企业信息</h3>
             </center>
 
-            <form action="{{url('/enterprise/update')}}" method="post">
+            <form action="{{url('/enterprise/update')}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <label>名 称</label>

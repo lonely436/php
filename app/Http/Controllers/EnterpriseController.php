@@ -84,11 +84,24 @@ class EnterpriseController extends Controller
     {
         // 1、从数据库找到企业
         $enterprise = Enterprise::find($request->input('id'));
+
+        //处理图片
+        // 如果上传了新的，那么我们就使用新的地址；如果没有，则使用旧地址
+        if ($request->hasFile('image')) {
+            // 上传图片
+            $file = $request->file('image');
+            $path = $file->store('images');
+            $pashDB = "/uploads/" . $path; // 存入数据库的路径
+        } else {
+            $pashDB = $enterprise->image;
+        }
+
         // 2、更新企业信息
         $enterprise->name = $request->input('name');
         $enterprise->abbreviate = $request->input('abbreviate');
         $enterprise->philosophy = $request->input('philosophy');
         $enterprise->description = $request->input('description');
+        $enterprise->image = $pashDB;
         // 3、更新企业信息
         $result = $enterprise->save();
         // 4、回到首页验证
