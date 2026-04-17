@@ -28,7 +28,7 @@ class EnterpriseController extends Controller
             // 上传图片
             $file = $request->file('image');
             $path = $file->store('images');
-            $pashDB = "/uploads" . $path; // 写入数据库的路径
+            $pashDB = "/uploads/" . $path; // 写入数据库的路径
 
             // 插入
             DB::table('enterprise')->insert(
