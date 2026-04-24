@@ -32,17 +32,7 @@
                     <textarea name="description" class="form-control" rows="3" placeholder="企业描述">{{old('description')}}</textarea>
                 </div>
                 <button type="submit" class="btn btn-info">提交</button>
-                <div class="form-group">
-                    @if(count($errors) > 0)
-                    <div class="alert alert-danger">
-                        <ul style="color: red">
-                            @foreach($errors->all() as $error)
-                            <li>{{$error}}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    @endif
-                </div>
+                @include('errors.error')
             </form>
         </div>
         <div class="col-md-3"></div>
