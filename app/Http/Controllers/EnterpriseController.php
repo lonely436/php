@@ -45,7 +45,7 @@ class EnterpriseController extends Controller
         } else {
             // 缓存信息
             $request->flash();
-            return back();
+            return back()->withErrors(['企业名称必须2个字符以上', '图片必须上传']);
         }
     }
 
