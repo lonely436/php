@@ -17,12 +17,12 @@ class EnterpriseController extends Controller
         return view('enterprise.index', ['enterprises' => $enterprises]);
     }
 
-    public function add()
+    public function create()
     {
         return view('enterprise.add');
     }
 
-    public function insert(Request $request)
+    public function store(Request $request)
     {
         if (strlen($request->input('name')) >= 2 && $request->hasFile('image')) {
             // 上传图片
@@ -41,7 +41,7 @@ class EnterpriseController extends Controller
                 ]
             );
             // 插入完毕后，回到首页验证
-            return redirect('/enterprise/index');
+            return redirect('/enterprise');
         } else {
             // 缓存信息
             $request->flash();
@@ -49,23 +49,25 @@ class EnterpriseController extends Controller
         }
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         // 1、从数据库找到企业
-        $result = DB::table('enterprise')->where('id', $id)->delete();
+        $result = DB::table('enterprise')->where('id', (int)$id)->delete();
         // 2、删除这个企业
         if ($result) {
-            return redirect('/enterprise/index');
+            return redirect('/enterprise');
         } else {
             echo "删除失败！";
         }
     }
 
-    // 详情
-    public function detail($id)
+    public function show($id)
     {
         // 1、从数据库找到企业
-        $enterprise = DB::table('enterprise')->where('id', $id)->first();
+        $enterprise = DB::table('enterprise')->where('id', (int)$id)->first();
+        if (!$enterprise) {
+            return redirect('/enterprise');
+        }
         // 2、把数据给到页面显示
         return view('enterprise.detail', ['enterprise' => $enterprise]);
     }
@@ -75,6 +77,9 @@ class EnterpriseController extends Controller
     {
         // 1、从数据库找到数据，然后给前端页面显示
         $enterprise = Enterprise::find($id);
+        if (!$enterprise) {
+            return redirect('/enterprise');
+        }
         // 2、把数据给到页面显示
         return view('enterprise.edit', ['enterprise' => $enterprise]);
     }
@@ -84,6 +89,9 @@ class EnterpriseController extends Controller
     {
         // 1、从数据库找到企业
         $enterprise = Enterprise::find($request->input('id'));
+        if (!$enterprise) {
+            return redirect('/enterprise');
+        }
 
         //处理图片
         // 如果上传了新的，那么我们就使用新的地址；如果没有，则使用旧地址
@@ -106,7 +114,7 @@ class EnterpriseController extends Controller
         $result = $enterprise->save();
         // 4、回到首页验证
         if ($result) {
-            return redirect('/enterprise/index');
+            return redirect('/enterprise');
         } else {
             echo "更新失败！";
         }

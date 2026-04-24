@@ -15,9 +15,13 @@
                         <h5>{{$enterprise->name}}</h5>
                         <p>{{mb_substr($enterprise->description, 0, 40)}}...</p>
                         <div class="mybutton">
-                            <a href="{{url('/enterprise/detail')}}/{{$enterprise->id}}" class="btn btn-default">详情</a>
-                            <a class="btn btn-default" href="{{url('/enterprise/edit')}}/{{$enterprise->id}}">编辑</a>
-                            <a class="btn btn-default" href="javascript:if(confirm('确定删除吗？'))window.location='/enterprise/delete/{{$enterprise->id}}'">删除</a>
+                            <a href="{{url('/enterprise')}}/{{$enterprise->id}}" class="btn btn-default">详情</a>
+                            <a class="btn btn-default" href="{{url('/enterprise')}}/{{$enterprise->id}}/edit">编辑</a>
+                            <a class="btn btn-default" href="javascript:void(0)" onclick="if(confirm('确定删除吗？')){document.getElementById('delete-form-{{$enterprise->id}}').submit();}">删除</a>
+                            <form id="delete-form-{{$enterprise->id}}" action="{{url('/enterprise')}}/{{$enterprise->id}}" method="POST" style="display:none">
+                                @csrf
+                                <input type="hidden" name="_method" value="DELETE">
+                            </form>
                         </div>
                     </div>
                 </div>

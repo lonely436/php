@@ -31,19 +31,29 @@
                 <ul class="nav navbar-nav">
                     <li><img class="logo" src="{{asset('images/mylogo.png')}}" alt=""></li>
                     <li><a href="#"> <span class="sr-only">(current)</span></a></li>
-                    <li><a href="{{url('/enterprise/index')}}">首页</a></li>
+                    <li><a href="{{url('/enterprise')}}">首页</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                             aria-haspopup="true" aria-expanded="false">名企管理 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="{{url('/enterprise/add')}}">添加企业</a></li>
-                            <li><a href="{{url('/enterprise/index')}}">管理企业</a></li>
+                            <li><a href="{{url('/enterprise/create')}}">添加企业</a></li>
+                            <li><a href="{{url('/enterprise')}}">管理企业</a></li>
                         </ul>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">欢迎您：admin</a></li>
-                    <li><a href="#">退出登录</a></li>
+                    @if(Auth::check())
+                        <li><a href="#">欢迎您：{{ Auth::user()->name }}</a></li>
+                        <li>
+                            <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit()">退出登录</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                    @else
+                        <li><a href="{{ route('login') }}">登录</a></li>
+                        <li><a href="{{ route('register') }}">注册</a></li>
+                    @endif
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->

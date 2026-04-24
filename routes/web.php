@@ -66,25 +66,22 @@ Route::group(array('prefix' => 'test'), function () {
 });
 */
 
-// 广东名企
-Route::group(array('prefix' => 'enterprise'), function () {
-    // 首页
-    Route::get('/index', [EnterpriseController::class, 'index']);
-    // 添加
-    Route::get('/add', [EnterpriseController::class, 'add']);
-    Route::post('/insert', [EnterpriseController::class, 'insert']);
-    // 修改
-    Route::get('/edit/{id}', [EnterpriseController::class, 'edit']);
-    Route::post('/update', [EnterpriseController::class, 'update']);
-    // 详情
-    Route::get('/detail/{id}', [EnterpriseController::class, 'detail']);
-    // 删除
-    Route::get('/delete/{id}', [EnterpriseController::class, 'delete']);
-});
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 
-// 资源路由
-// Route::resource('articles', ArticleController::class);
+// 认证路由
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register']);
+
+// 广东名企资源路由
+Route::resource('enterprise', EnterpriseController::class);
+
+// 文章资源路由
+Route::resource('articles', ArticleController::class);
 
 Route::get('viewtest1', function () {
     return view('viewtest1', ['city' => '<b>病毒代码</b>', 'enterprise' => '华帝', 'time' => 23]);
