@@ -15,11 +15,6 @@ class EnterpriseController extends Controller
         return response()->json(['data' => $enterprises]);
     }
 
-    public function create()
-    {
-        return view('enterprise.add');
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -64,15 +59,6 @@ class EnterpriseController extends Controller
         }
 
         return response()->json(['data' => $enterprise]);
-    }
-
-    public function edit($id)
-    {
-        $enterprise = Enterprise::find($id);
-        if (!$enterprise) {
-            return redirect('/enterprise');
-        }
-        return view('enterprise.edit', ['enterprise' => $enterprise]);
     }
 
     public function update(Request $request, $id)
