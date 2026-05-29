@@ -62,6 +62,7 @@ export default {
             try {
                 const response = await axios.post('/api/login', form);
                 localStorage.setItem('user', JSON.stringify(response.data.user));
+                window.dispatchEvent(new Event('storage'));
                 alert(response.data.message);
                 router.push('/enterprise');
             } catch (err) {

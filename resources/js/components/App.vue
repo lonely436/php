@@ -54,23 +54,39 @@
 
 <script>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 export default {
     name: 'App',
     setup() {
+        const router = useRouter();
         const currentUser = ref(null);
 
-        onMounted(() => {
+        const loadUser = () => {
             const user = localStorage.getItem('user');
             if (user) {
                 currentUser.value = JSON.parse(user);
+            } else {
+                currentUser.value = null;
             }
+        };
+
+        onMounted(() => {
+            loadUser();
+            window.addEventListener('storage', loadUser);
         });
 
-        const handleLogout = () => {
-            localStorage.removeItem('user');
-            currentUser.value = null;
-            window.location.href = '/login';
+        const handleLogout = async () => {
+            try {
+                await axios.post('/api/logout');
+            } catch (err) {
+                console.error('Logout error:', err);
+            } finally {
+                localStorage.removeItem('user');
+                currentUser.value = null;
+                router.push('/login');
+            }
         };
 
         return {
