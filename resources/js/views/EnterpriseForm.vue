@@ -45,17 +45,21 @@
             </div>
 
             <div class="form-group">
-                <label for="image">企业图片</label>
+                <label for="image">企业图片 <span class="text-danger">*</span></label>
                 <input 
                     type="file" 
                     id="image" 
                     @change="handleImageChange" 
                     class="form-control"
                     accept="image/*"
+                    :required="!isEdit || !form.image"
                 />
                 <div v-if="form.image || previewImage" class="thumbnail" style="margin-top: 10px;">
                     <img :src="previewImage || getImageUrl(form.image)" alt="预览" style="max-width: 200px; height: auto;" />
                 </div>
+                <p v-if="!isEdit && !imageFile && !form.image" class="text-danger" style="margin-top: 5px;">
+                    请上传一张图片
+                </p>
             </div>
 
             <div class="form-group">
