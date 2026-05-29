@@ -26,7 +26,8 @@ export default {
     },
 
     update(id, data) {
-        return api.put(`/enterprise/${id}`, data, {
+        data.append('_method', 'PUT');
+        return api.post(`/enterprise/${id}`, data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
