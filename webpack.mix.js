@@ -27,4 +27,9 @@ mix.js('resources/js/app_vue.js', 'public/js')
                 __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
             }),
         ],
+        externals: {
+            vue: 'Vue',
+            'vue-router': 'VueRouter',
+            axios: 'axios',
+        },
     });

@@ -1,7 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import EnterpriseList from './views/EnterpriseList.vue';
-import EnterpriseDetail from './views/EnterpriseDetail.vue';
-import EnterpriseForm from './views/EnterpriseForm.vue';
 
 const routes = [
     {
@@ -11,22 +8,22 @@ const routes = [
     {
         path: '/enterprise',
         name: 'EnterpriseList',
-        component: EnterpriseList,
+        component: () => import('./views/EnterpriseList.vue'),
     },
     {
         path: '/enterprise/create',
         name: 'EnterpriseCreate',
-        component: EnterpriseForm,
+        component: () => import('./views/EnterpriseForm.vue'),
     },
     {
         path: '/enterprise/:id',
         name: 'EnterpriseDetail',
-        component: EnterpriseDetail,
+        component: () => import('./views/EnterpriseDetail.vue'),
     },
     {
         path: '/enterprise/:id/edit',
         name: 'EnterpriseEdit',
-        component: EnterpriseForm,
+        component: () => import('./views/EnterpriseForm.vue'),
     },
 ];
 
