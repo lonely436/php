@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>广东名企网</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        #app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #333 !important;
+        }
+
+        .navbar-default .navbar-nav > li > a {
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .navbar-default .navbar-nav > li > a:hover {
+            color: #337ab7;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px 0;
+            background-color: #fff;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+            margin-top: auto;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table {
+            margin-top: 20px;
+        }
+
+        .btn {
+            margin-right: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+        }
+
+        .thumbnail {
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .text-danger {
+            color: #d9534f;
+        }
+
+        .description {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+
+        .description h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .description p {
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        const { createApp, ref, computed, onMounted } = Vue;
+        const { createRouter, createWebHistory } = VueRouter;
+
+        const api = axios.create({
+            baseURL: '/api',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        });
+
+        const enterpriseApi = {
+            getAll() {
+                return api.get('/enterprise');
+            },
+            getById(id) {
+                return api.get(`/enterprise/${id}`);
+            },
+            create(data) {
+                return api.post('/enterprise', data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            },
+            update(id, data) {
+                return api.put(`/enterprise/${id}`, data, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            },
+            delete(id) {
+                return api.delete(`/enterprise/${id}`);
+            },
+        };
+
+        const EnterpriseList = {
+            template: `
+                <div class="container">
+                    <div class="page-header">
+                        <h1>广东名企</h1>
+                        <router-link to="/enterprise/create" class="btn btn-primary">
+                            <i class="glyphicon glyphicon-plus"></i> 添加企业
+                        </router-link>
+                    </div>
+
+                    <div v-if="loading" class="text-center">
+                        <p>加载中...</p>
+                    </div>
+
+                    <div v-else-if="error" class="alert alert-danger">
+                        {{ error }}
+                    </div>
+
+                    <div v-else class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>企业名称</th>
+                                    <th>简称</th>
+                                    <th>企业理念</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="enterprise in enterprises" :key="enterprise.id">
+                                    <td>{{ enterprise.id }}</td>
+                                    <td>{{ enterprise.name }}</td>
+                                    <td>{{ enterprise.abbreviate }}</td>
+                                    <td>{{ enterprise.philosophy }}</td>
+                                    <td>
+                                        <router-link :to="\`/enterprise/\${enterprise.id}\`" class="btn btn-sm btn-info">
+                                            查看
+                                        </router-link>
+                                        <router-link :to="\`/enterprise/\${enterprise.id}/edit\`" class="btn btn-sm btn-warning">
+                                            编辑
+                                        </router-link>
+                                        <button @click="handleDelete(enterprise.id)" class="btn btn-sm btn-danger">
+                                            删除
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div v-if="enterprises.length === 0" class="text-center">
+                            <p>暂无企业数据</p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            setup() {
+                const enterprises = ref([]);
+                const loading = ref(false);
+                const error = ref(null);
+
+                const fetchEnterprises = async () => {
+                    loading.value = true;
+                    error.value = null;
+                    try {
+                        const response = await enterpriseApi.getAll();
+                        enterprises.value = response.data.data || [];
+                    } catch (err) {
+                        error.value = '加载企业列表失败';
+                        console.error(err);
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+
+                const handleDelete = async (id) => {
+                    if (!confirm('确定要删除这个企业吗？')) {
+                        return;
+                    }
+
+                    try {
+                        await enterpriseApi.delete(id);
+                        alert('删除成功');
+                        fetchEnterprises();
+                    } catch (err) {
+                        alert('删除失败');
+                        console.error(err);
+                    }
+                };
+
+                onMounted(fetchEnterprises);
+
+                return {
+                    enterprises,
+                    loading,
+                    error,
+                    handleDelete,
+                };
+            },
+        };
+
+        const EnterpriseDetail = {
+            template: `
+                <div class="container">
+                    <div v-if="loading" class="text-center">
+                        <p>加载中...</p>
+                    </div>
+
+                    <div v-else-if="error" class="alert alert-danger">
+                        {{ error }}
+                    </div>
+
+                    <div v-else-if="enterprise" class="enterprise-detail">
+                        <div class="page-header">
+                            <h1>{{ enterprise.name }}</h1>
+                            <div>
+                                <router-link :to="\`/enterprise/\${enterprise.id}/edit\`" class="btn btn-warning">
+                                    编辑
+                                </router-link>
+                                <router-link to="/enterprise" class="btn btn-default">
+                                    返回列表
+                                </router-link>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div v-if="enterprise.image" class="thumbnail">
+                                    <img :src="getImageUrl(enterprise.image)" alt="企业图片" style="max-width: 100%; height: auto;" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table">
+                                    <tr>
+                                        <th width="120">企业简称</th>
+                                        <td>{{ enterprise.abbreviate }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>企业理念</th>
+                                        <td>{{ enterprise.philosophy }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>ID</th>
+                                        <td>{{ enterprise.id }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="description">
+                            <h3>企业描述</h3>
+                            <p>{{ enterprise.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            `,
+            setup() {
+                const enterprise = ref(null);
+                const loading = ref(false);
+                const error = ref(null);
+
+                const fetchEnterprise = async () => {
+                    loading.value = true;
+                    error.value = null;
+                    try {
+                        const id = VueRouter.useRoute().params.id;
+                        const response = await enterpriseApi.getById(id);
+                        enterprise.value = response.data.data;
+                    } catch (err) {
+                        error.value = '加载企业详情失败';
+                        console.error(err);
+                    } finally {
+                        loading.value = false;
+                    }
+                };
+
+                const getImageUrl = (imagePath) => {
+                    if (imagePath && imagePath.startsWith('/')) {
+                        return imagePath;
+                    }
+                    return '/images/placeholder.jpg';
+                };
+
+                onMounted(fetchEnterprise);
+
+                return {
+                    enterprise,
+                    loading,
+                    error,
+                    getImageUrl,
+                };
+            },
+        };
+
+        const EnterpriseForm = {
+            template: `
+                <div class="container">
+                    <div class="page-header">
+                        <h1>{{ isEdit ? '编辑企业' : '添加企业' }}</h1>
+                        <router-link to="/enterprise" class="btn btn-default">
+                            返回列表
+                        </router-link>
+                    </div>
+
+                    <form @submit.prevent="handleSubmit">
+                        <div class="form-group">
+                            <label for="name">企业名称 <span class="text-danger">*</span></label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                v-model="form.name" 
+                                class="form-control" 
+                                placeholder="请输入企业名称"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="abbreviate">企业简称 <span class="text-danger">*</span></label>
+                            <input 
+                                type="text" 
+                                id="abbreviate" 
+                                v-model="form.abbreviate" 
+                                class="form-control" 
+                                placeholder="请输入企业简称"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="philosophy">企业理念 <span class="text-danger">*</span></label>
+                            <input 
+                                type="text" 
+                                id="philosophy" 
+                                v-model="form.philosophy" 
+                                class="form-control" 
+                                placeholder="请输入企业理念"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image">企业图片</label>
+                            <input 
+                                type="file" 
+                                id="image" 
+                                @change="handleImageChange" 
+                                class="form-control"
+                                accept="image/*"
+                            />
+                            <div v-if="form.image || previewImage" class="thumbnail" style="margin-top: 10px;">
+                                <img :src="previewImage || getImageUrl(form.image)" alt="预览" style="max-width: 200px; height: auto;" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">企业描述 <span class="text-danger">*</span></label>
+                            <textarea 
+                                id="description" 
+                                v-model="form.description" 
+                                class="form-control" 
+                                rows="6"
+                                placeholder="请输入企业描述"
+                                required
+                            ></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" :disabled="submitting">
+                                {{ submitting ? '提交中...' : (isEdit ? '更新' : '创建') }}
+                            </button>
+                            <router-link to="/enterprise" class="btn btn-default" style="margin-left: 10px;">
+                                取消
+                            </router-link>
+                        </div>
+                    </form>
+                </div>
+            `,
+            setup() {
+                const form = ref({
+                    name: '',
+                    abbreviate: '',
+                    philosophy: '',
+                    description: '',
+                    image: null,
+                });
+                const imageFile = ref(null);
+                const previewImage = ref(null);
+                const submitting = ref(false);
+
+                const route = VueRouter.useRoute();
+                const router = VueRouter.useRouter();
+
+                const isEdit = computed(() => !!route.params.id);
+
+                const fetchEnterprise = async () => {
+                    try {
+                        const response = await enterpriseApi.getById(route.params.id);
+                        const data = response.data.data;
+                        form.value = {
+                            name: data.name,
+                            abbreviate: data.abbreviate,
+                            philosophy: data.philosophy,
+                            description: data.description,
+                            image: data.image,
+                        };
+                        previewImage.value = data.image ? getImageUrl(data.image) : null;
+                    } catch (err) {
+                        alert('加载企业信息失败');
+                        console.error(err);
+                    }
+                };
+
+                const handleImageChange = (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        imageFile.value = file;
+                        previewImage.value = URL.createObjectURL(file);
+                    }
+                };
+
+                const getImageUrl = (imagePath) => {
+                    if (imagePath && imagePath.startsWith('/')) {
+                        return imagePath;
+                    }
+                    return '/images/placeholder.jpg';
+                };
+
+                const handleSubmit = async () => {
+                    submitting.value = true;
+                    try {
+                        const formData = new FormData();
+                        formData.append('name', form.value.name);
+                        formData.append('abbreviate', form.value.abbreviate);
+                        formData.append('philosophy', form.value.philosophy);
+                        formData.append('description', form.value.description);
+                        
+                        if (imageFile.value) {
+                            formData.append('image', imageFile.value);
+                        }
+
+                        if (isEdit.value) {
+                            await enterpriseApi.update(route.params.id, formData);
+                            alert('更新成功');
+                        } else {
+                            await enterpriseApi.create(formData);
+                            alert('创建成功');
+                        }
+                        router.push('/enterprise');
+                    } catch (err) {
+                        alert(isEdit.value ? '更新失败' : '创建失败');
+                        console.error(err);
+                    } finally {
+                        submitting.value = false;
+                    }
+                };
+
+                onMounted(() => {
+                    if (isEdit.value) {
+                        fetchEnterprise();
+                    }
+                });
+
+                return {
+                    form,
+                    previewImage,
+                    submitting,
+                    isEdit,
+                    handleImageChange,
+                    getImageUrl,
+                    handleSubmit,
+                };
+            },
+        };
+
+        const App = {
+            template: `
+                <div id="app">
+                    <nav class="navbar navbar-default">
+                        <div class="container">
+                            <div class="navbar-header">
+                                <router-link to="/enterprise" class="navbar-brand">
+                                    广东名企网
+                                </router-link>
+                            </div>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <router-link to="/enterprise">
+                                        <i class="glyphicon glyphicon-th-list"></i> 企业列表
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/enterprise/create">
+                                        <i class="glyphicon glyphicon-plus"></i> 添加企业
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+
+                    <main class="content">
+                        <router-view></router-view>
+                    </main>
+
+                    <footer class="footer">
+                        <div class="container text-center">
+                            <p>&copy; 2026 广东名企网。All rights reserved.</p>
+                        </div>
+                    </footer>
+                </div>
+            `,
+        };
+
+        const routes = [
+            {
+                path: '/',
+                redirect: '/enterprise',
+            },
+            {
+                path: '/enterprise',
+                name: 'EnterpriseList',
+                component: EnterpriseList,
+            },
+            {
+                path: '/enterprise/create',
+                name: 'EnterpriseCreate',
+                component: EnterpriseForm,
+            },
+            {
+                path: '/enterprise/:id',
+                name: 'EnterpriseDetail',
+                component: EnterpriseDetail,
+            },
+            {
+                path: '/enterprise/:id/edit',
+                name: 'EnterpriseEdit',
+                component: EnterpriseForm,
+            },
+        ];
+
+        const router = createRouter({
+            history: createWebHistory(),
+            routes,
+        });
+
+        const app = createApp(App);
+        app.use(router);
+        app.mount('#app');
+    </script>
+</body>
+</html>

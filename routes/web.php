@@ -17,7 +17,11 @@ use App\Http\Controllers\ArticleController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('vue');
+});
+
+Route::get('/vue', function () {
+    return view('vue');
 });
 
 Route::get("/ok", function () {

@@ -1,0 +1,118 @@
+<template>
+    <div id="app">
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <router-link to="/enterprise" class="navbar-brand">
+                        广东名企网
+                    </router-link>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <router-link to="/enterprise">
+                            <i class="glyphicon glyphicon-th-list"></i> 企业列表
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link to="/enterprise/create">
+                            <i class="glyphicon glyphicon-plus"></i> 添加企业
+                        </router-link>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="content">
+            <router-view></router-view>
+        </main>
+
+        <footer class="footer">
+            <div class="container text-center">
+                <p>&copy; 2026 广东名企网。All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'App',
+};
+</script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+#app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #333 !important;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #666;
+    transition: color 0.3s;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+    color: #337ab7;
+}
+
+.content {
+    flex: 1;
+    padding: 30px 0;
+    background-color: #fff;
+    margin-top: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    margin-top: auto;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+.text-center {
+    text-align: center;
+}
+</style>
