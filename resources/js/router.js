@@ -6,6 +6,16 @@ const routes = [
         redirect: '/enterprise',
     },
     {
+        path: '/login',
+        name: 'Login',
+        component: () => import('./views/Login.vue'),
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: () => import('./views/Register.vue'),
+    },
+    {
         path: '/enterprise',
         name: 'EnterpriseList',
         component: () => import('./views/EnterpriseList.vue'),

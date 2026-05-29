@@ -72,6 +72,7 @@ Route::group(array('prefix' => 'test'), function () {
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\AuthController;
 
 // 认证路由
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -80,6 +81,12 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
+
+// API 认证路由
+Route::post('/api/register', [AuthController::class, 'register']);
+Route::post('/api/login', [AuthController::class, 'login']);
+Route::post('/api/logout', [AuthController::class, 'logout']);
+Route::get('/api/me', [AuthController::class, 'me']);
 
 // 广东名企资源路由
 Route::resource('enterprise', EnterpriseController::class);

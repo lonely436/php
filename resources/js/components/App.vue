@@ -18,6 +18,24 @@
                             <i class="glyphicon glyphicon-plus"></i> 添加企业
                         </router-link>
                     </li>
+                    <li v-if="!currentUser">
+                        <router-link to="/login">
+                            <i class="glyphicon glyphicon-log-in"></i> 登录
+                        </router-link>
+                    </li>
+                    <li v-if="!currentUser">
+                        <router-link to="/register">
+                            <i class="glyphicon glyphicon-user"></i> 注册
+                        </router-link>
+                    </li>
+                    <li v-if="currentUser" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="glyphicon glyphicon-user"></i> {{ currentUser.name }} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" @click.prevent="handleLogout">退出登录</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -35,8 +53,31 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+
 export default {
     name: 'App',
+    setup() {
+        const currentUser = ref(null);
+
+        onMounted(() => {
+            const user = localStorage.getItem('user');
+            if (user) {
+                currentUser.value = JSON.parse(user);
+            }
+        });
+
+        const handleLogout = () => {
+            localStorage.removeItem('user');
+            currentUser.value = null;
+            window.location.href = '/login';
+        };
+
+        return {
+            currentUser,
+            handleLogout,
+        };
+    },
 };
 </script>
 
