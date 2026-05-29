@@ -43,11 +43,13 @@
 
 <script>
 import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 export default {
     name: 'Login',
     setup() {
+        const router = useRouter();
         const form = reactive({
             email: '',
             password: '',
@@ -61,7 +63,7 @@ export default {
                 const response = await axios.post('/api/login', form);
                 localStorage.setItem('user', JSON.stringify(response.data.user));
                 alert(response.data.message);
-                window.location.href = '/';
+                router.push('/enterprise');
             } catch (err) {
                 error.value = err.response?.data?.error || '登录失败';
             }

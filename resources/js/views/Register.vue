@@ -67,11 +67,13 @@
 
 <script>
 import { ref, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 
 export default {
     name: 'Register',
     setup() {
+        const router = useRouter();
         const form = reactive({
             name: '',
             email: '',
@@ -95,7 +97,7 @@ export default {
                 const response = await axios.post('/api/register', form);
                 success.value = response.data.message;
                 setTimeout(() => {
-                    window.location.href = '/login';
+                    router.push('/login');
                 }, 1500);
             } catch (err) {
                 const errors = err.response?.data?.errors;
