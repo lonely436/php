@@ -78,13 +78,13 @@ export default {
         });
 
         const handleLogout = async () => {
+            localStorage.removeItem('user');
+            currentUser.value = null;
             try {
                 await axios.post('/api/logout');
             } catch (err) {
                 console.error('Logout error:', err);
             } finally {
-                localStorage.removeItem('user');
-                currentUser.value = null;
                 router.push('/login');
             }
         };
